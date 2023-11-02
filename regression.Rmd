@@ -4,5 +4,48 @@ author: "Julianna D."
 date: "`r Sys.Date()`"
 output: html_document
 ---
-Import Data from Text Base
+```{r}
+# Horizontal Example
+
+# Load the plotrix package
+library(plotrix)
+ 
+# Create a data frame with some example data
+df <- data.frame(
+  group = c("A", "A", "B", "B", "C", "C"),
+  value = c(10, 12, 8, 9, 6, 7)
+)
+ 
+# Calculate the means and standard errors for each group
+means <- aggregate(value ~ group, data = df, FUN = mean)
+stderrs <- aggregate(value ~ group, data = df, 
+                     FUN = function(x) sd(x) / sqrt(length(x)))
+ 
+# Create a dot chart of the data
+dotchart(means$value, labels = means$group, xlim = c(0, max(means$value) * 1.1),
+         xlab = "Value")
+ 
+# Add error bars representing the standard error of the mean
+arrows(
+  x0 = means$value - stderrs$value,
+  y0 = 1:length(means$group),
+  x1 = means$value + stderrs$value,
+  y1 = 1:length(means$group),
+  angle = 90,
+  code = 3,
+  length = 0.1
+)
+```
+
+```{r}
+# Not correct but it's a start
+library(ggplot2)
+test <- ggplot(Regression_output, aes(Variable, Outcome)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=LowerLimit, ymax=UpperLimit))
+print(test)
+```
+
+
+
 

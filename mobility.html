@@ -489,12 +489,66 @@ print(c(lower.bound6,upper.bound6))</code></pre>
 </div>
 <div id="uninsured" class="section level2">
 <h2>7. uninsured</h2>
+<pre class="r"><code>sample.mean7 &lt;- mean(nonwhite_Hispanic)
+print(sample.mean7)</code></pre>
+<pre><code>## [1] 0.6488094</code></pre>
+<pre class="r"><code>sample.n7 &lt;- length(nonwhite_Hispanic)
+sample.sd7 &lt;- sd(nonwhite_Hispanic)
+sample.se7 &lt;- sample.sd6/sqrt(sample.n7)
+print(sample.se7)</code></pre>
+<pre><code>## [1] 0.02322592</code></pre>
+<pre class="r"><code>alpha = 0.05
+degrees.freedom = sample.n6 - 1
+t.score7 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score7)</code></pre>
+<pre><code>## [1] 1.979439</code></pre>
+<pre class="r"><code>margin.error7 &lt;- t.score7 * sample.se7
+lower.bound7 &lt;- sample.mean7 - margin.error7
+upper.bound7 &lt;- sample.mean7 + margin.error7
+print(c(lower.bound7,upper.bound7))</code></pre>
+<pre><code>## [1] 0.6028351 0.6947837</code></pre>
 </div>
 <div id="le_highschool" class="section level2">
 <h2>8. le_highschool</h2>
+<pre class="r"><code>sample.mean8 &lt;- mean(le_highschool)
+print(sample.mean8)</code></pre>
+<pre><code>## [1] 0.2727727</code></pre>
+<pre class="r"><code>sample.n8 &lt;- length(le_highschool)
+sample.sd8 &lt;- sd(le_highschool)
+sample.se8 &lt;- sample.sd6/sqrt(sample.n8)
+print(sample.se8)</code></pre>
+<pre><code>## [1] 0.02322592</code></pre>
+<pre class="r"><code>alpha = 0.05
+degrees.freedom = sample.n8 - 1
+t.score8 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score8)</code></pre>
+<pre><code>## [1] 1.979439</code></pre>
+<pre class="r"><code>margin.error8 &lt;- t.score8 * sample.se8
+lower.bound8 &lt;- sample.mean8 - margin.error8
+upper.bound8 &lt;- sample.mean8 + margin.error8
+print(c(lower.bound8,upper.bound8))</code></pre>
+<pre><code>## [1] 0.2267985 0.3187470</code></pre>
 </div>
-<div id="subway-use" class="section level2">
-<h2>9. Subway use</h2>
+<div id="mobility_april_11" class="section level2">
+<h2>9. mobility_April_11</h2>
+<pre class="r"><code>sample.mean9 &lt;- mean(mobility_April_11)
+print(sample.mean9)</code></pre>
+<pre><code>## [1] -21.00338</code></pre>
+<pre class="r"><code>sample.n9 &lt;- length(mobility_April_11)
+sample.sd9 &lt;- sd(mobility_April_11)
+sample.se9 &lt;- sample.sd9/sqrt(sample.n9)
+print(sample.se9)</code></pre>
+<pre><code>## [1] 0.6760078</code></pre>
+<pre class="r"><code>alpha = 0.05
+degrees.freedom = sample.n9 - 1
+t.score9 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score9)</code></pre>
+<pre><code>## [1] 1.979439</code></pre>
+<pre class="r"><code>margin.error9 &lt;- t.score9 * sample.se9
+lower.bound9 &lt;- sample.mean9 - margin.error9
+upper.bound9 &lt;- sample.mean9 + margin.error9
+print(c(lower.bound9,upper.bound9))</code></pre>
+<pre><code>## [1] -22.34149 -19.66526</code></pre>
 </div>
 </div>
 

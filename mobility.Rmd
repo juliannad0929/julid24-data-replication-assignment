@@ -5,7 +5,8 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 ```{r}
-attach(Book2)
+data <- read.csv("/Users/juliannadick/desktop/Book2.csv")
+attach(data)
 ```
 
 # Finding CI's for the variables
@@ -94,17 +95,107 @@ upper.bound4 <- sample.mean4 + margin.error4
 print(c(lower.bound4,upper.bound4))
 ```
 
-
 ## 5. nonhealth_essential
+```{r}
+sample.mean5 <- mean(nonhealth_essential)
+print(sample.mean5)
 
+sample.n5 <- length(nonhealth_essential)
+sample.sd5 <- sd(nonhealth_essential)
+sample.se5 <- sample.sd5/sqrt(sample.n5)
+print(sample.se5)
+
+alpha = 0.05
+degrees.freedom = sample.n1 - 1
+t.score5 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score5)
+
+margin.error5 <- t.score5 * sample.se5
+lower.bound5 <- sample.mean5 - margin.error5
+upper.bound5 <- sample.mean5 + margin.error5
+print(c(lower.bound5,upper.bound5))
+```
 
 ## 6. nonwhite_Hispanic
+```{r}
+sample.mean6 <- mean(nonwhite_Hispanic)
+print(sample.mean6)
 
+sample.n6 <- length(nonwhite_Hispanic)
+sample.sd6 <- sd(nonwhite_Hispanic)
+sample.se6 <- sample.sd6/sqrt(sample.n6)
+print(sample.se6)
+
+alpha = 0.05
+degrees.freedom = sample.n6 - 1
+t.score6 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score6)
+
+margin.error6 <- t.score6 * sample.se6
+lower.bound6 <- sample.mean6 - margin.error6
+upper.bound6 <- sample.mean6 + margin.error6
+print(c(lower.bound6,upper.bound6))
+```
 
 ## 7. uninsured
+```{r}
+sample.mean7 <- mean(nonwhite_Hispanic)
+print(sample.mean7)
 
+sample.n7 <- length(nonwhite_Hispanic)
+sample.sd7 <- sd(nonwhite_Hispanic)
+sample.se7 <- sample.sd6/sqrt(sample.n7)
+print(sample.se7)
+
+alpha = 0.05
+degrees.freedom = sample.n6 - 1
+t.score7 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score7)
+
+margin.error7 <- t.score7 * sample.se7
+lower.bound7 <- sample.mean7 - margin.error7
+upper.bound7 <- sample.mean7 + margin.error7
+print(c(lower.bound7,upper.bound7))
+```
 
 ## 8. le_highschool
+```{r}
+sample.mean8 <- mean(le_highschool)
+print(sample.mean8)
 
+sample.n8 <- length(le_highschool)
+sample.sd8 <- sd(le_highschool)
+sample.se8 <- sample.sd6/sqrt(sample.n8)
+print(sample.se8)
 
-## 9. Subway use
+alpha = 0.05
+degrees.freedom = sample.n8 - 1
+t.score8 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score8)
+
+margin.error8 <- t.score8 * sample.se8
+lower.bound8 <- sample.mean8 - margin.error8
+upper.bound8 <- sample.mean8 + margin.error8
+print(c(lower.bound8,upper.bound8))
+```
+
+## 9. mobility_April_11
+```{r}
+sample.mean9 <- mean(mobility_April_11)
+print(sample.mean9)
+
+sample.n9 <- length(mobility_April_11)
+sample.sd9 <- sd(mobility_April_11)
+sample.se9 <- sample.sd9/sqrt(sample.n9)
+print(sample.se9)
+
+alpha = 0.05
+degrees.freedom = sample.n9 - 1
+t.score9 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score9)
+
+margin.error9 <- t.score9 * sample.se9
+lower.bound9 <- sample.mean9 - margin.error9
+upper.bound9 <- sample.mean9 + margin.error9
+print(c(lower.bound9,upper.bound9))
+```

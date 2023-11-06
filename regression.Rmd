@@ -79,8 +79,14 @@ testing <- ggplot(df, aes(x=CI, y=outcome)) +
 print(testing)
 ```
 
+Trying one Outcome Variable at a time - Subway_Use
 ```{r}
+attach(Book1)
+library(ggplot2)
+test20 <- ggplot(Book1, aes(Variable, Outcome,)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=LowerLimit, ymax=UpperLimit))
+print(test20)
 
 ```
-
 

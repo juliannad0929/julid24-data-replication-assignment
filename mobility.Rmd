@@ -199,3 +199,17 @@ lower.bound9 <- sample.mean9 - margin.error9
 upper.bound9 <- sample.mean9 + margin.error9
 print(c(lower.bound9,upper.bound9))
 ```
+
+# Combining the Data
+```{r}
+#Confidence Intervals
+CIlow <- data.frame(c(lower.bound1, lower.bound2, lower.bound3, lower.bound4, lower.bound5, lower.bound6, lower.bound7, lower.bound8, lower.bound9))
+CIup <- data.frame(c(upper.bound1, upper.bound2, upper.bound3, upper.bound4, upper.bound5, upper.bound6, upper.bound7, upper.bound8, upper.bound9))
+print(CIlow)
+print(CIup)
+```
+
+```{r}
+
+```
+

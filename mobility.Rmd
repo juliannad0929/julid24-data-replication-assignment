@@ -1,0 +1,110 @@
+---
+title: "mobility"
+author: "Julianna D."
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r}
+attach(Book2)
+```
+
+# Finding CI's for the variables
+
+## 1. median_income
+```{r}
+sample.mean1 <- mean(median_income)
+print(sample.mean1)
+
+sample.n1 <- length(median_income)
+sample.sd1 <- sd(median_income)
+sample.se1 <- sample.sd1/sqrt(sample.n1)
+print(sample.se1)
+
+alpha = 0.05
+degrees.freedom = sample.n1 - 1
+t.score1 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score1)
+
+margin.error1 <- t.score1 * sample.se1
+lower.bound1 <- sample.mean1 - margin.error1
+upper.bound1 <- sample.mean1 + margin.error1
+print(c(lower.bound1,upper.bound1))
+```
+
+## 2. gt_75_yrs
+```{r}
+sample.mean2 <- mean(gt_75_yrs)
+print(sample.mean2)
+
+sample.n2 <- length(gt_75_yrs)
+sample.sd2 <- sd(gt_75_yrs)
+sample.se2 <- sample.sd2/sqrt(sample.n2)
+print(sample.se1)
+
+alpha = 0.05
+degrees.freedom = sample.n2 - 1
+t.score2 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score2)
+
+margin.error2 <- t.score2 * sample.se2
+lower.bound2 <- sample.mean2 - margin.error2
+upper.bound2 <- sample.mean2 + margin.error2
+print(c(lower.bound2,upper.bound2))
+```
+
+## 3. all_essential
+```{r}
+sample.mean3 <- mean(all_essential)
+print(sample.mean3)
+
+sample.n3 <- length(all_essential)
+sample.sd3 <- sd(all_essential)
+sample.se3 <- sample.sd3/sqrt(sample.n3)
+print(sample.se3)
+
+alpha = 0.05
+degrees.freedom = sample.n3 - 1
+t.score3 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score3)
+
+margin.error3 <- t.score3 * sample.se3
+lower.bound3 <- sample.mean3 - margin.error3
+upper.bound3 <- sample.mean3 + margin.error3
+print(c(lower.bound3,upper.bound3))
+```
+
+## 4. health_essential
+```{r}
+sample.mean4 <- mean(health_essential)
+print(sample.mean4)
+
+sample.n4 <- length(health_essential)
+sample.sd4 <- sd(health_essential)
+sample.se4 <- sample.sd4/sqrt(sample.n4)
+print(sample.se4)
+
+alpha = 0.05
+degrees.freedom = sample.n1 - 1
+t.score4 = qt(p=alpha/2, df=degrees.freedom,lower.tail=F)
+print(t.score4)
+
+margin.error4 <- t.score4 * sample.se4
+lower.bound4 <- sample.mean4 - margin.error4
+upper.bound4 <- sample.mean4 + margin.error4
+print(c(lower.bound4,upper.bound4))
+```
+
+
+## 5. nonhealth_essential
+
+
+## 6. nonwhite_Hispanic
+
+
+## 7. uninsured
+
+
+## 8. le_highschool
+
+
+## 9. Subway use

@@ -207,7 +207,10 @@ CIlow <- data.frame(c(lower.bound1, lower.bound2, lower.bound3, lower.bound4, lo
 CIup <- data.frame(c(upper.bound1, upper.bound2, upper.bound3, upper.bound4, upper.bound5, upper.bound6, upper.bound7, upper.bound8, upper.bound9))
 print(CIlow)
 print(CIup)
+CIall <- c(CIlow, CIup)
+print(CIall)
 ```
+
 
 ```{r}
 

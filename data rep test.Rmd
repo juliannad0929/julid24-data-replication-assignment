@@ -1,0 +1,76 @@
+---
+title: "data rep test"
+author: "Julianna D."
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+COVID_mobility_zcta_c <- read.csv("1._Cross-sectional_COVID19_mobility_zcta.csv")
+COVID_bor_l <- read.csv("2._Longitudinal_COVID19_borough.csv")
+mobility_zcta_bor_l <- read.csv("3._Longitudinal_Mobility_zcta_borough.csv")
+mobility_zcta_map <- read.csv("4._Map_Mobility_zcta.csv")
+regression_output <- read.csv("5._Regression_output.csv", stringsAsFactors = TRUE)
+```
+
+
+```{r fig4, echo=FALSE, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+regression_output$Variable <- factor(regression_output$Variable, levels = c("hs",
+                                                "healthins",
+                                                "minority",
+                                                "essential",
+                                                "health",
+                                                "essential_both",
+                                                "median_age",
+                                                "Median_Income",
+                                                "subway_use"),
+                       labels = c("<=High school education",
+                                  "Uninsured",
+                                  "Non-White/Hispanic",
+                                  "Non-health-care essential services",
+                                  "Health-care essential services",
+                                  "All essential services",
+                                  ">75 Years of age",
+                                  "Median income",
+                                  "Mobility"))
+
+regression_output$Outcome <- factor(regression_output$Outcome, levels = c("COVID_adjusted","Subway_Use"),
+                       labels = c("Rate of COVID-19 (per 100k)\n\nEstimate (adjusted for testing):\nRisk Ratio",
+                                  "Mobility (10 Units)\n\nEstimate (unadjusted):\nbeta"))
+
+#SEPARATE TO MAKE 2 PANEL PLOT
+
+df2 <- regression_output[1:8,]
+df3 <- regression_output[9:17,]
+df2$intercept <- 0
+df3$intercept <- 1
+
+#MOBILITY
+
+fig4_1 <- ggplot(data=df2, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
+  scale_y_continuous(limits=c(-.5,1.5), breaks = c(-.5,0,.5,1,1.5)) +
+  geom_pointrange(cex=0.3) +
+  geom_hline(data = df2, aes(fill=Variable, yintercept = intercept), linetype=2, show.legend = FALSE) + xlab('') + 
+  ylab(expression(beta)) + geom_errorbar(aes(ymin=LowerLimit, ymax=UpperLimit), width=0.3,cex=0.7) +
+  theme_classic(base_size=12) +
+  coord_flip() + theme(legend.position="bottom") + guides(col=guide_legend(ncol=3, byrow=TRUE, reverse = TRUE, title.position = "bottom")) + theme(legend.text = element_text(size=12), text=element_text(size=12), axis.text=element_text(size=12, colour="black"), legend.margin = margin(10, 50, 10, 10)
+)
+
+plot(fig4_1)
+
+#RISK RATIO
+
+fig4_2 <- ggplot(data=df3, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
+  scale_y_continuous(trans = "log", limits=c(.8,2.2), breaks = c(.8,1,1.2,1.4,1.6,1.8, 2.0, 2.2)) +
+  geom_pointrange(cex=0.3) +
+  geom_hline(data = df3, aes(fill=Variable, yintercept = intercept), linetype=2, show.legend = FALSE) + xlab('') + 
+  ylab("Risk Ratio") + geom_errorbar(aes(ymin=LowerLimit, ymax=UpperLimit),width=0.3,cex=0.7) +
+  theme_classic(base_size=12) +
+  coord_flip() + theme(legend.position="bottom") + guides(col=guide_legend(ncol=3, byrow=TRUE, reverse = TRUE, title.position = "bottom")) + theme(legend.text = element_text(size=12), text=element_text(size=12), axis.text=element_text(size=12, colour="black"), legend.margin = margin(10, 50, 10, 10)
+)
+
+plot(fig4_2)
+
+```
+

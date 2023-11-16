@@ -1,18 +1,24 @@
 ---
-title: "data rep test"
+title: "AN588 Data Replication"
 author: "Julianna D."
 date: "`r Sys.Date()`"
-output: html_document
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    toc: yes
 ---
+# Introduction
+> The figure I will be replicating is from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
+>> Citation: Karla Therese L Sy, Micaela E Martinez, Benjamin Rader, Laura F White, Socioeconomic Disparities in Subway Use and COVID-19 Outcomes in New York City, American Journal of Epidemiology, Volume 190, Issue 7, July 2021, Pages 1234–1242, https://doi.org/10.1093/aje/kwaa277
+
+
 # Getting Started
 
 ## Load Packages
 ```{r}
 library(ggplot2)
 library(dplyr)
-library(RColorBrewer)
 library(segmented)
-library(lubridate)
 ```
 
 ## Read Dataset
@@ -20,11 +26,11 @@ library(lubridate)
 regression_output <- read.csv("5._Regression_output.csv", stringsAsFactors = TRUE)
 ```
 
-# Replicating Figure 3
+# Replicating Figure 4
 
 ## Separating the Data
-```{r fig3, echo=FALSE, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
-
+```{r}
+# Step 1: Renaming the variables from the dataset for the legend
 regression_output$Variable <- factor(regression_output$Variable, levels = c("hs",
                                                 "healthins",
                                                 "minority",
@@ -42,48 +48,53 @@ regression_output$Variable <- factor(regression_output$Variable, levels = c("hs"
                                   "All essential services",
                                   ">75 Years of age",
                                   "Median income",
-                                  "Mobility")) #renaming the variables from the dataset for the legend
-
+                                  "Mobility")) 
+# Step 2: Separating the "Outcome" column
 regression_output$Outcome <- factor(regression_output$Outcome, levels = c("COVID_adjusted","Subway_Use"),
                        labels = c("Rate of COVID-19 (per 100k)\n\nEstimate (adjusted for testing):\nRisk Ratio",
-                                  "Mobility (10 Units)\n\nEstimate (unadjusted):\nbeta")) #separating the 'Outcome' column 
+                                  "Mobility (10 Units)\n\nEstimate (unadjusted):\nbeta")) 
 
-#SEPARATE TO MAKE 2 PANEL PLOT
-
-df2 <- regression_output[1:8,]
-df3 <- regression_output[9:17,]
-df2$intercept <- 0 #the null is 0
-df3$intercept <- 1 #the null for risk ratio is 1
+# Step 3: Making 2 separate data frames for each outcome 
+mobil <- regression_output[1:8,]
+RR <- regression_output[9:17,]
+# Step 4: Establishing the intercepts 
+mobil$intercept <- 0 #the null is 0
+RR$intercept <- 1 #the null for risk ratio is 1
 ```
 
 ## Mobility
-```{r fig3, echo=FALSE, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
-fig4_1 <- ggplot(data=df2, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
+```{r}
+fig4_1 <- ggplot(data=mobil, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(limits=c(-.5,1.5), breaks = c(-.5,0,.5,1,1.5)) +
   geom_pointrange(cex=0.3) +
-  geom_hline(data = df2, aes(fill=Variable, yintercept = intercept), linetype=2, show.legend = FALSE) + xlab('') + 
+  geom_hline(data = mobil, aes(colour=Variable, yintercept = intercept), linetype=2, show.legend = FALSE) + xlab('') + 
   ylab(expression(beta)) + geom_errorbar(aes(ymin=LowerLimit, ymax=UpperLimit), width=0.3,cex=0.7) +
   theme_classic(base_size=12) +
   coord_flip() + theme(legend.position="bottom") + guides(col=guide_legend(ncol=3, byrow=TRUE, reverse = TRUE, title.position = "bottom")) + theme(legend.text = element_text(size=12), text=element_text(size=12), axis.text=element_text(size=12, colour="black"), legend.margin = margin(10, 50, 10, 10)
 )
 
-plot(fig4_1)
+plot(fig4_1, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE)
 ```
 
-
 ## Risk Ratio
-```{r fig3, echo=FALSE, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r}
 
-fig4_2 <- ggplot(data=df3, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
+fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(trans = "log", limits=c(.8,2.2), breaks = c(.8,1,1.2,1.4,1.6,1.8, 2.0, 2.2)) +
   geom_pointrange(cex=0.3) +
-  geom_hline(data = df3, aes(fill=Variable, yintercept = intercept), linetype=2, show.legend = FALSE) + xlab('') + 
+  geom_hline(data = RR, aes(colour=Variable, yintercept = intercept), linetype=2, show.legend = FALSE) + xlab('') + 
   ylab("Risk Ratio") + geom_errorbar(aes(ymin=LowerLimit, ymax=UpperLimit),width=0.3,cex=0.7) +
   theme_classic(base_size=12) +
   coord_flip() + theme(legend.position="bottom") + guides(col=guide_legend(ncol=3, byrow=TRUE, reverse = TRUE, title.position = "bottom")) + theme(legend.text = element_text(size=12), text=element_text(size=12), axis.text=element_text(size=12, colour="black"), legend.margin = margin(10, 50, 10, 10)
 )
 
-plot(fig4_2)
+plot(fig4_2, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE)
 ```
 
+
 # Sources
+> https://stulp.gmw.rug.nl/ggplotworkshop/comparinggroupstatistics.html#mean-errorbar-plots  
+> https://stackoverflow.com/questions/14069629/how-can-i-plot-data-with-confidence-intervals  
+> https://ggplot2.tidyverse.org/reference/geom_abline.html  
+> https://rdocumentation.org/packages/ggplot2/versions/0.9.0/topics/geom_hline  
+> https://cran.r-project.org/web/packages/segmented/segmented.pdf  

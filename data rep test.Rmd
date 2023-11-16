@@ -8,7 +8,7 @@ output:
     toc: yes
 ---
 # Introduction
-> The figure I will be replicating is from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
+> The data and figure I will be replicating is from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
 
 > Citation: Karla Therese L Sy, Micaela E Martinez, Benjamin Rader, Laura F White, Socioeconomic Disparities in Subway Use and COVID-19 Outcomes in New York City, American Journal of Epidemiology, Volume 190, Issue 7, July 2021, Pages 1234–1242, https://doi.org/10.1093/aje/kwaa277
 

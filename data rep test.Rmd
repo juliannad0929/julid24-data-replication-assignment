@@ -4,6 +4,14 @@ author: "Julianna D."
 date: "`r Sys.Date()`"
 output: html_document
 ---
+```{r}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(segmented)
+library(lubridate)
+```
+
 
 ```{r}
 COVID_mobility_zcta_c <- read.csv("1._Cross-sectional_COVID19_mobility_zcta.csv")

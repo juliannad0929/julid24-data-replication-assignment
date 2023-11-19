@@ -8,10 +8,11 @@ output:
     toc: yes
 ---
 # Introduction
-> The data and figure I will be replicating is from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
+> The data analyses and figure I will be replicating is from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
 
 > Citation: Karla Therese L Sy, Micaela E Martinez, Benjamin Rader, Laura F White, Socioeconomic Disparities in Subway Use and COVID-19 Outcomes in New York City, American Journal of Epidemiology, Volume 190, Issue 7, July 2021, Pages 1234–1242, https://doi.org/10.1093/aje/kwaa277
 
+> I will be replicating a descriptive static, an inferential statistic, and a figure. 
 
 # Getting Started
 
@@ -22,14 +23,38 @@ library(dplyr) # for data manipulation
 library(segmented) # for regression models
 ```
 
-## Read Dataset
+# 1. Descriptive Statistics
+
+## Import the Dataset
+> Please download the following dataset from my repository: 1._Cross-sectional_COVID19_mobility_zcta.csv
+
 ```{r}
-regression_output <- read.csv("5._Regression_output.csv", stringsAsFactors = TRUE)
+subway_use <- read.csv("1._Cross-sectional_COVID19_mobility_zcta.csv", stringsAsFactors = TRUE)
+head(subway_use)
 ```
 
-# Replicating Figure 4
+## Calculate the Mean and IQR
+> The mean standardized change in subway use from baseline to Aprill 11 among all ZCTAs was -20.96 (IQR: -25.57 to -16.05).
 
-## Separating the Data
+```{r}
+
+```
+
+
+# 3. Replicating Figure 4
+> This figure assesses the association between sociodemographic variables, subway use, and COVID-19 rate per 100,0000 population. 
+
+## Import the Dataset
+> Please download the following dataset from my repository: 5._Regression_output.csv
+
+```{r}
+regression_output <- read.csv("5._Regression_output.csv", stringsAsFactors = TRUE)
+head(regression_output)
+```
+
+## Preparing the Data
+> First, I'm going to rename the variables for the legend
+
 ```{r}
 # Step 1: Renaming the variables from the dataset for the legend
 regression_output$Variable <- factor(regression_output$Variable, levels = c("hs",
@@ -50,6 +75,11 @@ regression_output$Variable <- factor(regression_output$Variable, levels = c("hs"
                                   ">75 Years of age",
                                   "Median income",
                                   "Mobility")) 
+```
+
+> Next, I want to separate the data by Outcome: "COVID-adjusted" and "Subway_Use"
+
+```{r}
 # Step 2: Separating the "Outcome" column
 regression_output$Outcome <- factor(regression_output$Outcome, levels = c("COVID_adjusted","Subway_Use"),
                        labels = c("Rate of COVID-19 (per 100k)\n\nEstimate (adjusted for testing):\nRisk Ratio",
@@ -63,7 +93,10 @@ mobil$intercept <- 0 #the null is 0
 RR$intercept <- 1 #the null for risk ratio is 1
 ```
 
-## Mobility
+## Subway_Use Estimated Beta
+> Then, we will make our figures for the estimated Beta for "Subway_Use" and the "COVID-adjusted" Risk Ratios.
+
+## Subway_Use Estimated Beta
 ```{r}
 fig4_1 <- ggplot(data=mobil, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(limits=c(-.5,1.5), breaks = c(-.5,0,.5,1,1.5)) +
@@ -77,7 +110,7 @@ fig4_1 <- ggplot(data=mobil, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, 
 plot(fig4_1, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE)
 ```
 
-## Risk Ratio
+## Covid-Adjusted Risk Ratio
 ```{r}
 
 fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +

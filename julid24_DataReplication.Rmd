@@ -17,9 +17,9 @@ output:
 
 ## Load Packages
 ```{r}
-library(ggplot2)
-library(dplyr)
-library(segmented)
+library(ggplot2) # for data visualization
+library(dplyr) # for data manipulation
+library(segmented) # for regression models
 ```
 
 ## Read Dataset

@@ -18,6 +18,7 @@ output:
 
 ## Load Packages
 ```{r}
+library(lubridate)
 library(ggplot2) # for data visualization
 library(dplyr) # for data manipulation
 library(segmented) # for regression models
@@ -29,12 +30,11 @@ library(segmented) # for regression models
 > Please download the following dataset from my repository: 1._Cross-sectional_COVID19_mobility_zcta.csv
 
 ```{r}
-sub <- read.csv("1._Cross-sectional_COVID19_mobility_zcta.csv", stringsAsFactors = TRUE)
-head(baseline)
+data <- read.csv("_", stringsAsFactors = TRUE)
+head(data)
 ```
 
-## Calculate the Mean and IQR
-> 
+## Calculate the __
 
 ```{r}
 

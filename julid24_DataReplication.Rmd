@@ -9,15 +9,17 @@ output:
 ---
 # Introduction
 > The data analyses and figure I will be replicating is from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
-
-> Citation: Karla Therese L Sy, Micaela E Martinez, Benjamin Rader, Laura F White, Socioeconomic Disparities in Subway Use and COVID-19 Outcomes in New York City, American Journal of Epidemiology, Volume 190, Issue 7, July 2021, Pages 1234–1242, https://doi.org/10.1093/aje/kwaa277
+>
+> Article Citation: Karla Therese L Sy, Micaela E Martinez, Benjamin Rader, Laura F White, Socioeconomic Disparities in Subway Use and COVID-19 Outcomes in New York City, American Journal of Epidemiology, Volume 190, Issue 7, July 2021, Pages 1234–1242, https://doi.org/10.1093/aje/kwaa277
+>
+> Dataset Citation: Sy, Karla Therese L.; Martinez, Micaela E.; Rader, Benjamin; White, Laura F. (2021). Socioeconomic disparities in subway use and COVID-19 outcomes in New York City [Dataset]. Dryad. https://doi.org/10.5061/dryad.vhhmgqnrh 
 
 > I will be replicating a descriptive static, an inferential statistic, and a figure. 
 
 # Getting Started
 
 ## Load Packages
-```{r}
+```{r, warning=FALSE}
 library(lubridate)
 library(ggplot2) # for data visualization
 library(dplyr) # for data manipulation

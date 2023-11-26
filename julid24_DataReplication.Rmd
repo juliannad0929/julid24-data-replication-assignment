@@ -8,19 +8,24 @@ output:
     toc: yes
 ---
 # Introduction
-> The data analyses and figure I will be replicating is from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
+> I will be replicating a descriptive static, an inferential statistic, and a figure from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
 >
 > Article Citation: Karla Therese L Sy, Micaela E Martinez, Benjamin Rader, Laura F White, Socioeconomic Disparities in Subway Use and COVID-19 Outcomes in New York City, American Journal of Epidemiology, Volume 190, Issue 7, July 2021, Pages 1234–1242, https://doi.org/10.1093/aje/kwaa277
 >
 > Dataset Citation: Sy, Karla Therese L.; Martinez, Micaela E.; Rader, Benjamin; White, Laura F. (2021). Socioeconomic disparities in subway use and COVID-19 outcomes in New York City [Dataset]. Dryad. https://doi.org/10.5061/dryad.vhhmgqnrh 
 
-> I will be replicating a descriptive static, an inferential statistic, and a figure. 
+# Description of the Study
+- briefly outline the goal of the original paper, the dataset used, and the analyses conducted
+
+- describe which you will replicate
+
 
 # Getting Started
 
 ## Load Packages
 ```{r, warning=FALSE}
 library(lubridate)
+library(curl)
 library(ggplot2) # for data visualization
 library(dplyr) # for data manipulation
 library(segmented) # for regression models
@@ -29,14 +34,14 @@ library(segmented) # for regression models
 # 1. Descriptive Statistics
 
 ## Import the Dataset
-> Please download the following dataset from my repository: 1._Cross-sectional_COVID19_mobility_zcta.csv
+> Please download the following dataset from my repository folder "Sy open data": 1._Cross-sectional_COVID19_mobility_zcta.csv
 
 ```{r}
-data <- read.csv("_", stringsAsFactors = TRUE)
-head(data)
+d <- read.csv("1._Cross-sectional_COVID19_mobility_zcta.csv", header=TRUE, stringsAsFactors = TRUE)
+head(d)
 ```
 
-## Calculate the __
+## Descriptive Table
 
 ```{r}
 
@@ -49,7 +54,7 @@ head(data)
 > This figure assesses the association between sociodemographic variables, subway use, and COVID-19 rate per 100,0000 population. 
 
 ## Import the Dataset
-> Please download the following dataset from my repository: 5._Regression_output.csv
+> Please download the following dataset from my repository folder "Sy open data": 5._Regression_output.csv
 
 ```{r}
 regression_output <- read.csv("5._Regression_output.csv", stringsAsFactors = TRUE)
@@ -89,9 +94,10 @@ regression_output$Outcome <- factor(regression_output$Outcome, levels = c("COVID
                        labels = c("Rate of COVID-19 (per 100k)\n\nEstimate (adjusted for testing):\nRisk Ratio",
                                   "Mobility (10 Units)\n\nEstimate (unadjusted):\nbeta")) 
 
-# Step 3: Making 2 separate data frames for each outcome 
-mobil <- regression_output[1:8,]
-RR <- regression_output[9:17,]
+# Step 3: Making 2 separate data frames for each outcome.
+mobil <- regression_output[1:8,] #rows 1-8 refers to Subway_Use, or mobility
+RR <- regression_output[9:17,] #rows 9-17 refer to Covid_adjusted for the Risk Ratio
+
 # Step 4: Establishing the intercepts 
 mobil$intercept <- 0 #the null is 0
 RR$intercept <- 1 #the null for risk ratio is 1
@@ -101,7 +107,7 @@ RR$intercept <- 1 #the null for risk ratio is 1
 > Then, we will make our figures for the estimated Beta for "Subway_Use" and the "COVID-adjusted" Risk Ratios.
 
 ## Subway_Use Estimated Beta
-```{r}
+```{r, warning=FALSE}
 fig4_1 <- ggplot(data=mobil, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(limits=c(-.5,1.5), breaks = c(-.5,0,.5,1,1.5)) +
   geom_pointrange(cex=0.3) +
@@ -134,5 +140,7 @@ plot(fig4_2, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE
 > https://stulp.gmw.rug.nl/ggplotworkshop/comparinggroupstatistics.html#mean-errorbar-plots  
 > https://stackoverflow.com/questions/14069629/how-can-i-plot-data-with-confidence-intervals  
 > https://ggplot2.tidyverse.org/reference/geom_abline.html  
+
 > https://rdocumentation.org/packages/ggplot2/versions/0.9.0/topics/geom_hline  
+
 > https://cran.r-project.org/web/packages/segmented/segmented.pdf  

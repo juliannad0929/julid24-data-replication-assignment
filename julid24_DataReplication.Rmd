@@ -11,16 +11,16 @@ output:
 > I will be replicating a descriptive static, an inferential statistic, and a figure from the following paper: "Socioeconomic disparities in subway use and COVID-19 outcomes in New York City."  
 >
 > Article Citation: Karla Therese L Sy, Micaela E Martinez, Benjamin Rader, Laura F White, Socioeconomic Disparities in Subway Use and COVID-19 Outcomes in New York City, American Journal of Epidemiology, Volume 190, Issue 7, July 2021, Pages 1234–1242, https://doi.org/10.1093/aje/kwaa277
->
-> Dataset Citation: Sy, Karla Therese L.; Martinez, Micaela E.; Rader, Benjamin; White, Laura F. (2021). Socioeconomic disparities in subway use and COVID-19 outcomes in New York City [Dataset]. Dryad. https://doi.org/10.5061/dryad.vhhmgqnrh 
-
-# Description of the Study
+ 
+## Description of the Study
 - briefly outline the goal of the original paper, the dataset used, and the analyses conducted
-> The goal of the authors' research was to highlight how socioeconomic disparities in New York City were magnified during the COVID-19 pandemic during the onset of the stay-at-home mandaate. They looked at Subway data to assess mobility in different NYC boroughs  by looking at metro card swipes at different subway stations from January 2020 to April 2020 (Note: the lockdown began on March 15, 2020). While some residents chose to reduce their mobility on their own accord between January 2020 and April 2020, the authors found that residents of lower socioeconomic status who lived in certain NYC boroughs, identified as non-White, and were essential/health-care essential workers were more likely to continue using the Subway until the official lockdown in March.
+> The goal of the authors' research was to highlight how socioeconomic disparities in New York City were magnified during the COVID-19 pandemic during the onset of the stay-at-home mandaate. They looked at Subway data to assess mobility in different NYC boroughs  by looking at metro card swipes at different subway stations from January 2020 to April 2020 (Note: the lockdown began on March 15, 2020). While some residents chose to reduce their mobility on their own accord between January 2020 and April 2020, the authors found that 2 groups of residents remained mobile until the official lockdown in March. People of lower socioeconomic status who identified as non-White and people who were essential/health-care essential workers were more likely to continue using the Subway until the official lockdown mandate on March 15, 2020. 
 
+## Dataset Used
+> Dataset Citation: Sy, Karla Therese L.; Martinez, Micaela E.; Rader, Benjamin; White, Laura F. (2021). Socioeconomic disparities in subway use and COVID-19 outcomes in New York City [Dataset]. Dryad. https://doi.org/10.5061/dryad.vhhmgqnrh
 
-- describe which you will replicate
-
+## Analyses Conducted
+> I will be replicating ___ for the descriptive statistic, Figure 4, and 95% confidence intervals for median income for the inferential statistic. 
 
 # Getting Started
 
@@ -33,7 +33,7 @@ library(segmented) # for regression models
 
 # 1. Descriptive Statistics
 
-#@ Descriptive Table?
+## Descriptive Table?
 
 # 2. Inferential Statistics
 

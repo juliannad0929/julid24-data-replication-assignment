@@ -16,6 +16,8 @@ output:
 
 # Description of the Study
 - briefly outline the goal of the original paper, the dataset used, and the analyses conducted
+> The goal of the authors' research was to highlight how socioeconomic disparities in New York City were magnified during the COVID-19 pandemic during the onset of the stay-at-home mandaate. They looked at Subway data to assess mobility in different NYC boroughs  by looking at metro card swipes at different subway stations from January 2020 to April 2020 (Note: the lockdown began on March 15, 2020). While some residents chose to reduce their mobility on their own accord between January 2020 and April 2020, the authors found that residents of lower socioeconomic status who lived in certain NYC boroughs, identified as non-White, and were essential/health-care essential workers were more likely to continue using the Subway until the official lockdown in March.
+
 
 - describe which you will replicate
 

@@ -37,14 +37,36 @@ library(segmented) # for regression models
 > Please download the following dataset from my repository folder "Sy open data": 1._Cross-sectional_COVID19_mobility_zcta.csv
 
 ```{r}
-d <- read.csv("1._Cross-sectional_COVID19_mobility_zcta.csv", header=TRUE, stringsAsFactors = TRUE)
+d <- read.csv("Sy open data/Fare_Card_History_for_Metropolitan_Transportation_Authority__MTA___Beginning_2010_copy.csv", header=TRUE)
 head(d)
 ```
 
-## Descriptive Table
 
 ```{r}
+colnames(nyc_station1)[ncol(nyc_station1)] <- "Station"
+nyc_longlat <- merge(nyc, nyc_station1, by="Station", all.x=TRUE) # RIGHT JOIN
+# we didn't have lat/longs for all the stations in the nyc dataframe, so remove those we don't have locations for
+nyc_long_lat <- nyc_longlat[!is.na(nyc_longlat$lon),] # initial dataset but with lat and long
+# make a copy of the data frame to turn into a spatial object
+nyc_long_lat2 <- nyc_long_lat 
 
+
+# our data spans Jan 4th, 2020 - April 11, 2020
+dates <- (as.data.frame(unique(nyc_long_lat$From.Date))) %>% arrange(unique(nyc_long_lat$From.Date))
+dates1 <- dates[,1]
+
+# add the dates to the matrix
+nyc_matrix_final <- cbind(dates,matrix_nyc)
+colnames(nyc_matrix_final)[1] <- "dates"
+
+# rearrange the weekly ridership by borough in a dataframe
+nyc_matrix_final2 <-reshape(nyc_matrix_final, 
+        direction = "long",
+        varying = list(names(nyc_matrix_final)[2:6]),
+        v.names = "MTA",
+        idvar = c("dates", "Manhattan"),
+        timevar = "Borough",
+        times = c("Bronx", "Staten Island", "Brooklyn", "Queens", "Manhattan"))
 ```
 
 

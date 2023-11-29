@@ -39,10 +39,19 @@ library(segmented) # for regression models
 ```{r}
 d <- read.csv("Sy open data/3._Longitudinal_Mobility_zcta_borough.csv", header=TRUE)
 head(d)
-d <- na.omit(d)
 ```
 
+```{r}
+nyc_change_long2_zcta_nosi1 <- left_join(mobility_zcta_bor_l, COVID_mobility_zcta_c[,c("ZCTA","median_income")], by=c("ZCTA"="ZCTA"))
+nyc_change_long2_zcta_nosi11 <- nyc_change_long2_zcta_nosi1 %>% mutate(income_d = ntile(median_income, 5))
 
+#To get the quantile minimum and maximum for each income group, to be used as labels in Figure 3
+
+quantile <- nyc_change_long2_zcta_nosi11 %>%
+  group_by(income_d) %>%
+  summarise(min=min(median_income,na.rm=TRUE), max=max(median_income,na.rm=TRUE))
+quantile
+```
 
 # 2. Inferential Statistics
 
@@ -62,7 +71,7 @@ head(regression_output)
 > First, I'm going to rename the variables for the legend
 
 ```{r}
-# Step 1: Renaming the variables from the dataset for the legend
+# Step 1: REnaming the variables from the dataset and making labels for the legend
 regression_output$Variable <- factor(regression_output$Variable, levels = c("hs",
                                                 "healthins",
                                                 "minority",
@@ -86,7 +95,7 @@ regression_output$Variable <- factor(regression_output$Variable, levels = c("hs"
 > Next, I want to separate the data by Outcome: "COVID-adjusted" and "Subway_Use"
 
 ```{r}
-# Step 2: Separating the "Outcome" column
+# Step 2: Separating the "Outcome" column into "COVID_adjusted" and "Subway_Use"
 regression_output$Outcome <- factor(regression_output$Outcome, levels = c("COVID_adjusted","Subway_Use"),
                        labels = c("Rate of COVID-19 (per 100k)\n\nEstimate (adjusted for testing):\nRisk Ratio",
                                   "Mobility (10 Units)\n\nEstimate (unadjusted):\nbeta")) 

@@ -24,8 +24,6 @@ output:
 
 ## Load Packages
 ```{r, warning=FALSE}
-library(lubridate)
-library(curl)
 library(ggplot2) # for data visualization
 library(dplyr) # for data manipulation
 library(segmented) # for regression models
@@ -33,17 +31,22 @@ library(segmented) # for regression models
 
 # 1. Descriptive Statistics
 
+
+# 2. Inferential Statistics
+
 ## Import the Dataset
-> Please download the following dataset from my repository folder "Sy open data": 3._Longitudinal_Mobility_zcta_borough.csv
+> Please download the following datasets from my repository folder "Sy open data": 3._Longitudinal_Mobility_zcta_borough.csv
 
 ```{r}
 d <- read.csv("Sy open data/3._Longitudinal_Mobility_zcta_borough.csv", header=TRUE)
 head(d)
+x <- read.csv("Sy open data/1._Cross-sectional_COVID19_mobility_zcta.csv", header=TRUE)
+head(x)
 ```
 
 ## 95% Confidence Interval for Median Income
 ```{r}
-nyc_change_long2_zcta_nosi1 <- left_join(mobility_zcta_bor_l, COVID_mobility_zcta_c[,c("ZCTA","median_income")], by=c("ZCTA"="ZCTA"))
+nyc_change_long2_zcta_nosi1 <- left_join(d, x[,c("ZCTA","median_income")], by=c("ZCTA"="ZCTA"))
 nyc_change_long2_zcta_nosi11 <- nyc_change_long2_zcta_nosi1 %>% mutate(income_d = ntile(median_income, 5))
 
 #To get the quantile minimum and maximum for each income group, to be used as labels in Figure 3
@@ -53,8 +56,6 @@ quantile <- nyc_change_long2_zcta_nosi11 %>%
   summarise(min=min(median_income,na.rm=TRUE), max=max(median_income,na.rm=TRUE))
 quantile
 ```
-
-# 2. Inferential Statistics
 
 # 3. Replicating Figure 4
 > This figure assesses the association between sociodemographic variables, subway use, and COVID-19 rate per 100,0000 population. 

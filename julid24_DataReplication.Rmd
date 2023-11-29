@@ -34,13 +34,14 @@ library(segmented) # for regression models
 # 1. Descriptive Statistics
 
 ## Import the Dataset
-> Please download the following dataset from my repository folder "Sy open data": 1._Cross-sectional_COVID19_mobility_zcta.csv
+> Please download the following dataset from my repository folder "Sy open data": 3._Longitudinal_Mobility_zcta_borough.csv
 
 ```{r}
 d <- read.csv("Sy open data/3._Longitudinal_Mobility_zcta_borough.csv", header=TRUE)
 head(d)
 ```
 
+## 95% Confidence Interval for Median Income
 ```{r}
 nyc_change_long2_zcta_nosi1 <- left_join(mobility_zcta_bor_l, COVID_mobility_zcta_c[,c("ZCTA","median_income")], by=c("ZCTA"="ZCTA"))
 nyc_change_long2_zcta_nosi11 <- nyc_change_long2_zcta_nosi1 %>% mutate(income_d = ntile(median_income, 5))
@@ -112,7 +113,6 @@ RR$intercept <- 1 #the null for risk ratio is 1
 ## Subway_Use Estimated Beta
 > Then, we will make our figures for the estimated Beta for "Subway_Use" and the "COVID-adjusted" Risk Ratios.
 
-## Subway_Use Estimated Beta
 ```{r, warning=FALSE}
 fig4_1 <- ggplot(data=mobil, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(limits=c(-.5,1.5), breaks = c(-.5,0,.5,1,1.5)) +
@@ -144,9 +144,11 @@ plot(fig4_2, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE
 
 # Sources
 > https://stulp.gmw.rug.nl/ggplotworkshop/comparinggroupstatistics.html#mean-errorbar-plots  
+>
 > https://stackoverflow.com/questions/14069629/how-can-i-plot-data-with-confidence-intervals  
+>
 > https://ggplot2.tidyverse.org/reference/geom_abline.html  
-
+>
 > https://rdocumentation.org/packages/ggplot2/versions/0.9.0/topics/geom_hline  
-
+>
 > https://cran.r-project.org/web/packages/segmented/segmented.pdf  

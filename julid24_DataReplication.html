@@ -1284,17 +1284,18 @@ margin-left: 0 !important;
       </ul></li>
       <li><a href="#descriptive-statistics" id="toc-descriptive-statistics">1. Descriptive Statistics</a>
       <ul>
+      <li><a href="#import-the-dataset" id="toc-import-the-dataset">Import the Dataset</a></li>
       <li><a href="#descriptive-table" id="toc-descriptive-table">Descriptive Table?</a></li>
       </ul></li>
       <li><a href="#inferential-statistics" id="toc-inferential-statistics">2. Inferential Statistics</a>
       <ul>
-      <li><a href="#import-the-dataset" id="toc-import-the-dataset">Import the Dataset</a></li>
+      <li><a href="#import-the-dataset-1" id="toc-import-the-dataset-1">Import the Dataset</a></li>
       <li><a href="#confidence-interval-for-median-income" id="toc-confidence-interval-for-median-income">95% Confidence
       Interval for Median Income</a></li>
       </ul></li>
       <li><a href="#replicating-figure-4" id="toc-replicating-figure-4">3. Replicating Figure 4</a>
       <ul>
-      <li><a href="#import-the-dataset-1" id="toc-import-the-dataset-1">Import the Dataset</a></li>
+      <li><a href="#import-the-dataset-2" id="toc-import-the-dataset-2">Import the Dataset</a></li>
       <li><a href="#preparing-the-data" id="toc-preparing-the-data">Preparing the Data</a></li>
       <li><a href="#subway_use-estimated-beta" id="toc-subway_use-estimated-beta">Subway_Use Estimated
       Beta</a></li>
@@ -1344,8 +1345,10 @@ April 2020, the authors found that 2 groups of residents remained mobile
 until the official lockdown in March. People of lower socioeconomic
 status who identified as non-White and people who were
 essential/health-care essential workers were more likely to continue
-using the Subway until the official lockdown mandate on March 15,
-2020.</p>
+using the Subway until the official lockdown mandate on March 15, 2020.
+This is a result of socioeconomic disparities, causing certain groups of
+people to continue going to work and putting their health at risk during
+the start of the COVID-19 pandemic.</p>
 </blockquote>
 </div>
 <div id="dataset-used" class="section level2">
@@ -1359,14 +1362,17 @@ outcomes in New York City [Dataset]. Dryad. <a href="https://doi.org/10.5061/dry
 <div id="analyses-conducted" class="section level2">
 <h2>Analyses Conducted</h2>
 <blockquote>
-<p>I will be replicating ___ for the descriptive statistic, Figure 4,
-and 95% confidence intervals for median income for the inferential
+<p>The authors conducted a variety of analyses, including
+cross-sectional analyses, risk ratios, odds ratios, beta coefficients,
+95% confidence intervals, regression, and segmented regression. I will
+be replicating ___ for the descriptive statistic, Figure 4, and 95%
+confidence intervals for median income for the inferential
 statistic.</p>
 </blockquote>
 </div>
 <div id="getting-started-load-packages" class="section level2">
 <h2>Getting Started: Load Packages</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(curl)</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(curl) <span class="co"># to connect &amp; load data from github</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># for data visualization</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># for data manipulation</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(segmented) <span class="co"># for regression models</span></span></code></pre></div>
@@ -1374,13 +1380,101 @@ statistic.</p>
 </div>
 <div id="descriptive-statistics" class="section level1">
 <h1>1. Descriptive Statistics</h1>
+<div id="import-the-dataset" class="section level2">
+<h2>Import the Dataset</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">curl</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/5._Regression_output.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(a, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">head</span>(table)</span></code></pre></div>
+<pre><code>##         Variable   RiskRatio   LowerLimit   UpperLimit    Outcome
+## 1  Median_Income -0.05934571 -0.118362741 -0.000328685 Subway_Use
+## 2     median_age  0.21151916 -0.285217617  0.708255933 Subway_Use
+## 3 essential_both  0.38438064  0.033033092  0.735728177 Subway_Use
+## 4         health  0.78410149  0.164119743  1.404083229 Subway_Use
+## 5      essential  0.11575314 -0.051443338  0.282949620 Subway_Use
+## 6       minority  0.05885062  0.007763423  0.109937814 Subway_Use</code></pre>
+</div>
 <div id="descriptive-table" class="section level2">
 <h2>Descriptive Table?</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.06</span>, <span class="fl">0.26</span>, <span class="fl">0.35</span>, <span class="fl">0.82</span>, <span class="fl">0.10</span>, <span class="fl">0.06</span>, <span class="fl">0.03</span>, <span class="fl">0.10</span>, <span class="sc">-</span><span class="fl">0.12</span>, <span class="sc">-</span><span class="fl">0.24</span>, <span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="sc">-</span><span class="fl">0.07</span>, <span class="fl">0.01</span>, <span class="sc">-</span><span class="fl">0.32</span>, <span class="sc">-</span><span class="fl">0.02</span>, <span class="sc">-</span><span class="fl">0.99</span>, <span class="sc">-</span><span class="fl">0.75</span>, <span class="fl">0.7</span>, <span class="fl">1.44</span>, <span class="fl">0.26</span>, <span class="fl">0.11</span>, <span class="fl">0.38</span>, <span class="fl">0.21</span>, <span class="fl">0.91</span>, <span class="fl">1.31</span>, <span class="fl">1.8</span>, <span class="fl">1.36</span>, <span class="fl">1.31</span>, <span class="fl">1.07</span>, <span class="fl">1.12</span>, <span class="fl">1.25</span>, <span class="fl">0.89</span>, <span class="fl">1.08</span>, <span class="fl">1.59</span>, <span class="fl">1.09</span>, <span class="fl">1.23</span>, <span class="fl">1.05</span>, <span class="fl">0.96</span>, <span class="fl">1.19</span>, <span class="fl">0.93</span>, <span class="fl">1.59</span>, <span class="fl">2.04</span>, <span class="fl">1.7</span>, <span class="fl">1.4</span>, <span class="fl">1.09</span>, <span class="fl">1.32</span>, <span class="fl">1.31</span>), <span class="at">ncol=</span><span class="dv">6</span>, <span class="at">byrow=</span><span class="cn">FALSE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;Unadjusted B&#39;</span>, <span class="st">&#39;Beta 95% CI Lower Limit&#39;</span>, <span class="st">&#39;Beta 95% CI Upper Limit&#39;</span>, <span class="st">&#39;Adjusted RR&#39;</span>, <span class="st">&#39;RR 95% CI Lower Limit&#39;</span>, <span class="st">&#39;RR 95% CI Upper Limit&#39;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;Median income&#39;</span>, <span class="st">&#39;Percent &gt; 75 years&#39;</span>,<span class="st">&#39;Percent in essential services&#39;</span>, <span class="st">&#39;percent in healthcare essential services&#39;</span>, <span class="st">&#39;percent in non-healthcare essential services&#39;</span>, <span class="st">&#39;percent non-white/Hispanic&#39;</span>, <span class="st">&#39;Percent with uninsured&#39;</span>, <span class="st">&#39;percent education high school or less&#39;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">as.table</span>(tab)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">print</span>(tab)</span></code></pre></div>
+<pre><code>##                                              Unadjusted B
+## Median income                                       -0.06
+## Percent &gt; 75 years                                   0.26
+## Percent in essential services                        0.35
+## percent in healthcare essential services             0.82
+## percent in non-healthcare essential services         0.10
+## percent non-white/Hispanic                           0.06
+## Percent with uninsured                               0.03
+## percent education high school or less                0.10
+##                                              Beta 95% CI Lower Limit
+## Median income                                                  -0.12
+## Percent &gt; 75 years                                             -0.24
+## Percent in essential services                                   0.01
+## percent in healthcare essential services                        0.20
+## percent in non-healthcare essential services                   -0.07
+## percent non-white/Hispanic                                      0.01
+## Percent with uninsured                                         -0.32
+## percent education high school or less                          -0.02
+##                                              Beta 95% CI Upper Limit
+## Median income                                                  -0.99
+## Percent &gt; 75 years                                             -0.75
+## Percent in essential services                                   0.70
+## percent in healthcare essential services                        1.44
+## percent in non-healthcare essential services                    0.26
+## percent non-white/Hispanic                                      0.11
+## Percent with uninsured                                          0.38
+## percent education high school or less                           0.21
+##                                              Adjusted RR RR 95% CI Lower Limit
+## Median income                                       0.91                  0.89
+## Percent &gt; 75 years                                  1.31                  1.08
+## Percent in essential services                       1.80                  1.59
+## percent in healthcare essential services            1.36                  1.09
+## percent in non-healthcare essential services        1.31                  1.23
+## percent non-white/Hispanic                          1.07                  1.05
+## Percent with uninsured                              1.12                  0.96
+## percent education high school or less               1.25                  1.19
+##                                              RR 95% CI Upper Limit
+## Median income                                                 0.93
+## Percent &gt; 75 years                                            1.59
+## Percent in essential services                                 2.04
+## percent in healthcare essential services                      1.70
+## percent in non-healthcare essential services                  1.40
+## percent non-white/Hispanic                                    1.09
+## Percent with uninsured                                        1.32
+## percent education high school or less                         1.31</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Separated by Outcome column</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>subway <span class="ot">&lt;-</span> table[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>,]</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>RR <span class="ot">&lt;-</span> table[<span class="dv">9</span><span class="sc">:</span><span class="dv">17</span>,]</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">print</span>(subway)</span></code></pre></div>
+<pre><code>##         Variable   RiskRatio   LowerLimit   UpperLimit    Outcome
+## 1  Median_Income -0.05934571 -0.118362741 -0.000328685 Subway_Use
+## 2     median_age  0.21151916 -0.285217617  0.708255933 Subway_Use
+## 3 essential_both  0.38438064  0.033033092  0.735728177 Subway_Use
+## 4         health  0.78410149  0.164119743  1.404083229 Subway_Use
+## 5      essential  0.11575314 -0.051443338  0.282949620 Subway_Use
+## 6       minority  0.05885062  0.007763423  0.109937814 Subway_Use
+## 7      healthins  0.04149552 -0.306372031  0.389363066 Subway_Use
+## 8             hs  0.10304444 -0.013253760  0.219342642 Subway_Use</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">print</span>(RR)</span></code></pre></div>
+<pre><code>##          Variable RiskRatio LowerLimit UpperLimit        Outcome
+## 9   Median_Income 0.9114902  0.8884332  0.9353515 COVID_adjusted
+## 10     median_age 1.1716409  0.9563702  1.4407209 COVID_adjusted
+## 11 essential_both 1.7831169  1.5369293  2.0699402 COVID_adjusted
+## 12         health 1.1068202  0.8563582  1.4354341 COVID_adjusted
+## 13      essential 1.2755637  1.1878054  1.3701140 COVID_adjusted
+## 14       minority 1.0561623  1.0334577  1.0792595 COVID_adjusted
+## 15      healthins 1.2441496  1.0626758  1.4608786 COVID_adjusted
+## 16             hs 1.2003498  1.1430395  1.2603310 COVID_adjusted
+## 17     subway_use 1.1209936  1.0468284  1.1998901 COVID_adjusted</code></pre>
 </div>
 </div>
 <div id="inferential-statistics" class="section level1">
 <h1>2. Inferential Statistics</h1>
-<div id="import-the-dataset" class="section level2">
+<div id="import-the-dataset-1" class="section level2">
 <h2>Import the Dataset</h2>
 <p>Please download the following datasets from my repository folder “Sy
 open data”:</p>
@@ -1388,10 +1482,10 @@ open data”:</p>
 <li>1._Cross-sectional_COVID19_mobility_zcta.csv</li>
 <li>3._Longitudinal_Mobility_zcta_borough.csv</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># 1._Cross-sectional_COVID19_mobility_zcta.csv </span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">curl</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/1._Cross-sectional_COVID19_mobility_zcta.csv&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(f, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">head</span>(d)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># 1._Cross-sectional_COVID19_mobility_zcta.csv </span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">curl</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/1._Cross-sectional_COVID19_mobility_zcta.csv&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(f, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">head</span>(d)</span></code></pre></div>
 <pre><code>##     borough  ZCTA cumincidence mobility_April_11 median_income   gt_75_yrs
 ## 1 Manhattan 10001          375         -29.33179         62349 0.078825685
 ## 2 Manhattan 10002          978         -34.48675         20295 0.107996746
@@ -1413,10 +1507,10 @@ open data”:</p>
 ## 4 0.04920740    0.02741083   0.011889036                   0.4137931 0.02873184
 ## 5 0.02683728    0.03929340   0.006681010                   0.3241758 0.02060922
 ## 6 0.02084540    0.01244933   0.006369427                   0.2857143 0.02229299</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># 3._Longitudinal_Mobility_zcta_borough.csv</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">curl</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/3._Longitudinal_Mobility_zcta_borough.csv&quot;</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(y, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">head</span>(x)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># 3._Longitudinal_Mobility_zcta_borough.csv</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">curl</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/3._Longitudinal_Mobility_zcta_borough.csv&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(y, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">head</span>(x)</span></code></pre></div>
 <pre><code>##       date   borough  ZCTA   mobility
 ## 1 1/4/2020 Manhattan 10001  1.0453155
 ## 2 1/4/2020 Manhattan 10002  0.2999584
@@ -1427,17 +1521,17 @@ open data”:</p>
 </div>
 <div id="confidence-interval-for-median-income" class="section level2">
 <h2>95% Confidence Interval for Median Income</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># First, we want to extract the values of the median incomes by zip code tabulation area (ZCTA)</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>nyc_med_income_zcta <span class="ot">&lt;-</span> <span class="fu">left_join</span>(x, d[,<span class="fu">c</span>(<span class="st">&quot;ZCTA&quot;</span>,<span class="st">&quot;median_income&quot;</span>)], <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ZCTA&quot;</span><span class="ot">=</span><span class="st">&quot;ZCTA&quot;</span>)) <span class="co">#left_join() keeps all observations in x</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>nyc_med_income_zcta_1 <span class="ot">&lt;-</span> nyc_med_income_zcta <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">income_d =</span> <span class="fu">ntile</span>(median_income, <span class="dv">5</span>)) <span class="co">#mutate() creates new columns that are functions of existing variables</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#To get the quantile minimum and maximum for each income group</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>quantile <span class="ot">&lt;-</span> nyc_med_income_zcta_1 <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">group_by</span>(income_d) <span class="sc">%&gt;%</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">min=</span><span class="fu">min</span>(median_income,<span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="at">max=</span><span class="fu">max</span>(median_income,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>quantile</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># First, we want to extract the values of the median incomes by zip code tabulation area (ZCTA)</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>nyc_med_income_zcta <span class="ot">&lt;-</span> <span class="fu">left_join</span>(x, d[,<span class="fu">c</span>(<span class="st">&quot;ZCTA&quot;</span>,<span class="st">&quot;median_income&quot;</span>)], <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ZCTA&quot;</span><span class="ot">=</span><span class="st">&quot;ZCTA&quot;</span>)) <span class="co">#left_join() keeps all observations in x</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>nyc_med_income_zcta_1 <span class="ot">&lt;-</span> nyc_med_income_zcta <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">income_d =</span> <span class="fu">ntile</span>(median_income, <span class="dv">5</span>)) <span class="co">#mutate() creates new columns that are functions of existing variables</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#To get the quantile minimum and maximum for each income group</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>quantile <span class="ot">&lt;-</span> nyc_med_income_zcta_1 <span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="fu">group_by</span>(income_d) <span class="sc">%&gt;%</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">min=</span><span class="fu">min</span>(median_income,<span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="at">max=</span><span class="fu">max</span>(median_income,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>quantile</span></code></pre></div>
 <pre><code>## # A tibble: 5 × 3
 ##   income_d   min    max
 ##      &lt;int&gt; &lt;int&gt;  &lt;int&gt;
@@ -1458,13 +1552,13 @@ replicated the median income confidence intervals in the legend. <img src="data:
 <p>This figure assesses the association between sociodemographic
 variables, subway use, and COVID-19 rate per 100,0000 population.</p>
 </blockquote>
-<div id="import-the-dataset-1" class="section level2">
+<div id="import-the-dataset-2" class="section level2">
 <h2>Import the Dataset</h2>
 <p>Please download the following dataset from my repository folder “Sy
 open data”: 5._Regression_output.csv</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">curl</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/5._Regression_output.csv&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(r, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">head</span>(reg)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">curl</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/5._Regression_output.csv&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(r, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">head</span>(reg)</span></code></pre></div>
 <pre><code>##         Variable   RiskRatio   LowerLimit   UpperLimit    Outcome
 ## 1  Median_Income -0.05934571 -0.118362741 -0.000328685 Subway_Use
 ## 2     median_age  0.21151916 -0.285217617  0.708255933 Subway_Use
@@ -1478,41 +1572,41 @@ open data”: 5._Regression_output.csv</p>
 <blockquote>
 <p>First, I’m going to rename the variables for the legend</p>
 </blockquote>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Step 1: Factoring the variables from the dataset and making labels for the legend</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>reg<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">factor</span>(reg<span class="sc">$</span>Variable, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;hs&quot;</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>                                                <span class="st">&quot;healthins&quot;</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>                                                <span class="st">&quot;minority&quot;</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>                                                <span class="st">&quot;essential&quot;</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>                                                <span class="st">&quot;health&quot;</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>                                                <span class="st">&quot;essential_both&quot;</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>                                                <span class="st">&quot;median_age&quot;</span>,</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>                                                <span class="st">&quot;Median_Income&quot;</span>,</span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>                                                <span class="st">&quot;subway_use&quot;</span>),</span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;High school education&quot;</span>,</span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>                                  <span class="st">&quot;Uninsured&quot;</span>,</span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>                                  <span class="st">&quot;Non-White/Hispanic&quot;</span>,</span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>                                  <span class="st">&quot;Non-health-care essential services&quot;</span>,</span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>                                  <span class="st">&quot;Health-care essential services&quot;</span>,</span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>                                  <span class="st">&quot;All essential services&quot;</span>,</span>
-<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>                                  <span class="st">&quot;&gt;75 Years of age&quot;</span>,</span>
-<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>                                  <span class="st">&quot;Median income&quot;</span>,</span>
-<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>                                  <span class="st">&quot;Mobility&quot;</span>)) </span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># Step 1: Factoring the variables from the dataset and making labels for the legend</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>reg<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">factor</span>(reg<span class="sc">$</span>Variable, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;hs&quot;</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>                                                <span class="st">&quot;healthins&quot;</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>                                                <span class="st">&quot;minority&quot;</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>                                                <span class="st">&quot;essential&quot;</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>                                                <span class="st">&quot;health&quot;</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>                                                <span class="st">&quot;essential_both&quot;</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>                                                <span class="st">&quot;median_age&quot;</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>                                                <span class="st">&quot;Median_Income&quot;</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>                                                <span class="st">&quot;subway_use&quot;</span>),</span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;High school education&quot;</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>                                  <span class="st">&quot;Uninsured&quot;</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>                                  <span class="st">&quot;Non-White/Hispanic&quot;</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>                                  <span class="st">&quot;Non-health-care essential services&quot;</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>                                  <span class="st">&quot;Health-care essential services&quot;</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>                                  <span class="st">&quot;All essential services&quot;</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>                                  <span class="st">&quot;&gt;75 Years of age&quot;</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a>                                  <span class="st">&quot;Median income&quot;</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a>                                  <span class="st">&quot;Mobility&quot;</span>)) </span></code></pre></div>
 <blockquote>
 <p>Next, I want to separate the data by Outcome: “COVID-adjusted” and
 “Subway_Use”</p>
 </blockquote>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Step 2: Separating the &quot;Outcome&quot; column into &quot;COVID_adjusted&quot; and &quot;Subway_Use&quot;</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>reg<span class="sc">$</span>Outcome <span class="ot">&lt;-</span> <span class="fu">factor</span>(reg<span class="sc">$</span>Outcome, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;COVID_adjusted&quot;</span>,<span class="st">&quot;Subway_Use&quot;</span>),</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Rate of COVID-19 (per 100k)</span><span class="sc">\n\n</span><span class="st">Estimate (adjusted for testing):</span><span class="sc">\n</span><span class="st">Risk Ratio&quot;</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                                  <span class="st">&quot;Mobility (10 Units)</span><span class="sc">\n\n</span><span class="st">Estimate (unadjusted):</span><span class="sc">\n</span><span class="st">beta&quot;</span>)) </span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co"># Step 3: Making 2 separate data frames for each outcome.</span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>mobil <span class="ot">&lt;-</span> reg[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>,] <span class="co">#rows 1-8 refers to Subway_Use, or mobility</span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>RR <span class="ot">&lt;-</span> reg[<span class="dv">9</span><span class="sc">:</span><span class="dv">17</span>,] <span class="co">#rows 9-17 refer to Covid_adjusted for the Risk Ratio</span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co"># Step 4: Establishing the intercepts </span></span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>mobil<span class="sc">$</span>intercept <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#the null is 0</span></span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>RR<span class="sc">$</span>intercept <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#the null for risk ratio is 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># Step 2: Separating the &quot;Outcome&quot; column into &quot;COVID_adjusted&quot; and &quot;Subway_Use&quot;</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>reg<span class="sc">$</span>Outcome <span class="ot">&lt;-</span> <span class="fu">factor</span>(reg<span class="sc">$</span>Outcome, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;COVID_adjusted&quot;</span>,<span class="st">&quot;Subway_Use&quot;</span>),</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Rate of COVID-19 (per 100k)</span><span class="sc">\n\n</span><span class="st">Estimate (adjusted for testing):</span><span class="sc">\n</span><span class="st">Risk Ratio&quot;</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>                                  <span class="st">&quot;Mobility (10 Units)</span><span class="sc">\n\n</span><span class="st">Estimate (unadjusted):</span><span class="sc">\n</span><span class="st">beta&quot;</span>)) </span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co"># Step 3: Making 2 separate data frames for each outcome.</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>mobil <span class="ot">&lt;-</span> reg[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>,] <span class="co">#rows 1-8 refers to Subway_Use, or mobility</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>RR <span class="ot">&lt;-</span> reg[<span class="dv">9</span><span class="sc">:</span><span class="dv">17</span>,] <span class="co">#rows 9-17 refer to Covid_adjusted for the Risk Ratio</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co"># Step 4: Establishing the intercepts </span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>mobil<span class="sc">$</span>intercept <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#the null is 0</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>RR<span class="sc">$</span>intercept <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#the null for risk ratio is 1</span></span></code></pre></div>
 </div>
 <div id="subway_use-estimated-beta" class="section level2">
 <h2>Subway_Use Estimated Beta</h2>

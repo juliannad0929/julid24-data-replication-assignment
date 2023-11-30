@@ -10,17 +10,18 @@ output: rmdformats::readthedown
 - Article Citation: Karla Therese L Sy, Micaela E Martinez, Benjamin Rader, Laura F White, Socioeconomic Disparities in Subway Use and COVID-19 Outcomes in New York City, American Journal of Epidemiology, Volume 190, Issue 7, July 2021, Pages 1234–1242, https://doi.org/10.1093/aje/kwaa277
  
 ## Description of the Study
-> The goal of the authors' research was to highlight how socioeconomic disparities in New York City were magnified during the COVID-19 pandemic during the onset of the stay-at-home mandaate. They looked at Subway data to assess mobility in different NYC boroughs  by looking at metro card swipes at different subway stations from January 2020 to April 2020 (Note: the lockdown began on March 15, 2020). While some residents chose to reduce their mobility on their own accord between January 2020 and April 2020, the authors found that 2 groups of residents remained mobile until the official lockdown in March. People of lower socioeconomic status who identified as non-White and people who were essential/health-care essential workers were more likely to continue using the Subway until the official lockdown mandate on March 15, 2020. 
+> The goal of the authors' research was to highlight how socioeconomic disparities in New York City were magnified during the COVID-19 pandemic during the onset of the stay-at-home mandaate. They looked at Subway data to assess mobility in different NYC boroughs  by looking at metro card swipes at different subway stations from January 2020 to April 2020 (Note: the lockdown began on March 15, 2020). While some residents chose to reduce their mobility on their own accord between January 2020 and April 2020, the authors found that 2 groups of residents remained mobile until the official lockdown in March. People of lower socioeconomic status who identified as non-White and people who were essential/health-care essential workers were more likely to continue using the Subway until the official lockdown mandate on March 15, 2020. This is a result of socioeconomic disparities, causing certain groups of people to continue going to work and putting their health at risk during the start of the COVID-19 pandemic. 
 
 ## Dataset Used
 > Sy, Karla Therese L.; Martinez, Micaela E.; Rader, Benjamin; White, Laura F. (2021). Socioeconomic disparities in subway use and COVID-19 outcomes in New York City [Dataset]. Dryad. https://doi.org/10.5061/dryad.vhhmgqnrh
 
 ## Analyses Conducted
+> The authors conducted a variety of analyses, including cross-sectional analyses, risk ratios, odds ratios, beta coefficients, 95% confidence intervals, regression, and segmented regression.
 > I will be replicating ___ for the descriptive statistic, Figure 4, and 95% confidence intervals for median income for the inferential statistic. 
 
 ## Getting Started: Load Packages
 ```{r, message=FALSE, warning=FALSE}
-library(curl)
+library(curl) # to connect & load data from github
 library(ggplot2) # for data visualization
 library(dplyr) # for data manipulation
 library(segmented) # for regression models
@@ -28,7 +29,31 @@ library(segmented) # for regression models
 
 # 1. Descriptive Statistics
 
+## Import the Dataset
+```{r}
+a <- curl("https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/5._Regression_output.csv")
+table <- read.csv(a, header=TRUE, stringsAsFactors = TRUE)
+head(table)
+```
+
 ## Descriptive Table?
+
+```{r}
+tab <- matrix(c(-0.06, 0.26, 0.35, 0.82, 0.10, 0.06, 0.03, 0.10, -0.12, -0.24, 0.01, 0.2, -0.07, 0.01, -0.32, -0.02, -0.99, -0.75, 0.7, 1.44, 0.26, 0.11, 0.38, 0.21, 0.91, 1.31, 1.8, 1.36, 1.31, 1.07, 1.12, 1.25, 0.89, 1.08, 1.59, 1.09, 1.23, 1.05, 0.96, 1.19, 0.93, 1.59, 2.04, 1.7, 1.4, 1.09, 1.32, 1.31), ncol=6, byrow=FALSE)
+colnames(tab) <- c('Unadjusted B', 'Beta 95% CI Lower Limit', 'Beta 95% CI Upper Limit', 'Adjusted RR', 'RR 95% CI Lower Limit', 'RR 95% CI Upper Limit')
+rownames(tab) <- c('Median income', 'Percent > 75 years','Percent in essential services', 'percent in healthcare essential services', 'percent in non-healthcare essential services', 'percent non-white/Hispanic', 'Percent with uninsured', 'percent education high school or less')
+tab <- as.table(tab)
+print(tab)
+```
+
+```{r}
+# Separated by Outcome column
+subway <- table[1:8,]
+RR <- table[9:17,]
+
+print(subway)
+print(RR)
+```
 
 # 2. Inferential Statistics
 

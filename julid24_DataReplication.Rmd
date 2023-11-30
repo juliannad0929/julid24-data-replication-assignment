@@ -57,12 +57,14 @@ head(x)
 
 ## 95% Confidence Interval for Median Income
 ```{r}
-nyc_change_long2_zcta_nosi1 <- left_join(x, d[,c("ZCTA","median_income")], by=c("ZCTA"="ZCTA")) #left_join keeps all observations in x
-nyc_change_long2_zcta_nosi11 <- nyc_change_long2_zcta_nosi1 %>% mutate(income_d = ntile(median_income, 5))
+# First, we want to extract the values of the median incomes by zip code tabulation area (ZCTA)
+nyc_med_income_zcta <- left_join(x, d[,c("ZCTA","median_income")], by=c("ZCTA"="ZCTA")) #left_join() keeps all observations in x
 
-#To get the quantile minimum and maximum for each income group, to be used as labels in Figure 3
+nyc_med_income_zcta_1 <- nyc_med_income_zcta %>% mutate(income_d = ntile(median_income, 5)) #mutate() creates new columns that are functions of existing variables
 
-quantile <- nyc_change_long2_zcta_nosi11 %>%
+#To get the quantile minimum and maximum for each income group
+
+quantile <- nyc_med_income_zcta_1 %>%
   group_by(income_d) %>%
   summarise(min=min(median_income,na.rm=TRUE), max=max(median_income,na.rm=TRUE))
 quantile
@@ -78,8 +80,9 @@ quantile
 Please download the following dataset from my repository folder "Sy open data": 5._Regression_output.csv
 
 ```{r}
-regression_output <- read.csv("Sy open data/5._Regression_output.csv", stringsAsFactors = TRUE)
-head(regression_output)
+r <- curl("https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/5._Regression_output.csv")
+reg <- read.csv(r, header=TRUE, stringsAsFactors = TRUE)
+head(reg)
 ```
 
 
@@ -87,8 +90,8 @@ head(regression_output)
 > First, I'm going to rename the variables for the legend
 
 ```{r}
-# Step 1: REnaming the variables from the dataset and making labels for the legend
-regression_output$Variable <- factor(regression_output$Variable, levels = c("hs",
+# Step 1: Renaming the variables from the dataset and making labels for the legend
+reg$Variable <- factor(reg$Variable, levels = c("hs",
                                                 "healthins",
                                                 "minority",
                                                 "essential",
@@ -112,13 +115,13 @@ regression_output$Variable <- factor(regression_output$Variable, levels = c("hs"
 
 ```{r}
 # Step 2: Separating the "Outcome" column into "COVID_adjusted" and "Subway_Use"
-regression_output$Outcome <- factor(regression_output$Outcome, levels = c("COVID_adjusted","Subway_Use"),
+reg$Outcome <- factor(reg$Outcome, levels = c("COVID_adjusted","Subway_Use"),
                        labels = c("Rate of COVID-19 (per 100k)\n\nEstimate (adjusted for testing):\nRisk Ratio",
                                   "Mobility (10 Units)\n\nEstimate (unadjusted):\nbeta")) 
 
 # Step 3: Making 2 separate data frames for each outcome.
-mobil <- regression_output[1:8,] #rows 1-8 refers to Subway_Use, or mobility
-RR <- regression_output[9:17,] #rows 9-17 refer to Covid_adjusted for the Risk Ratio
+mobil <- reg[1:8,] #rows 1-8 refers to Subway_Use, or mobility
+RR <- reg[9:17,] #rows 9-17 refer to Covid_adjusted for the Risk Ratio
 
 # Step 4: Establishing the intercepts 
 mobil$intercept <- 0 #the null is 0
@@ -128,7 +131,7 @@ RR$intercept <- 1 #the null for risk ratio is 1
 ## Subway_Use Estimated Beta
 > Then, we will make our figures for the estimated Beta for "Subway_Use" and the "COVID-adjusted" Risk Ratios.
 
-```{r, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 fig4_1 <- ggplot(data=mobil, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(limits=c(-.5,1.5), breaks = c(-.5,0,.5,1,1.5)) +
   geom_pointrange(cex=0.3) +
@@ -138,11 +141,11 @@ fig4_1 <- ggplot(data=mobil, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, 
   coord_flip() + theme(legend.position="bottom") + guides(col=guide_legend(ncol=3, byrow=TRUE, reverse = TRUE, title.position = "bottom")) + theme(legend.text = element_text(size=12), text=element_text(size=12), axis.text=element_text(size=12, colour="black"), legend.margin = margin(10, 50, 10, 10)
 )
 
-plot(fig4_1, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE)
+plot(fig4_1, fig.height=8, fig.width=8)
 ```
 
 ## Covid-Adjusted Risk Ratio
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print-FALSE}
 
 fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(trans = "log", limits=c(.8,2.2), breaks = c(.8,1,1.2,1.4,1.6,1.8, 2.0, 2.2)) +
@@ -153,7 +156,7 @@ fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, yma
   coord_flip() + theme(legend.position="bottom") + guides(col=guide_legend(ncol=3, byrow=TRUE, reverse = TRUE, title.position = "bottom")) + theme(legend.text = element_text(size=12), text=element_text(size=12), axis.text=element_text(size=12, colour="black"), legend.margin = margin(10, 50, 10, 10)
 )
 
-plot(fig4_2, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE)
+plot(fig4_2, fig.height=8, fig.width=8)
 ```
 
 <img src="julid24-data-replication-assignment/Figure 4 data rep.png" width="100px"/>
@@ -168,5 +171,7 @@ plot(fig4_2, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE
 > https://rdocumentation.org/packages/ggplot2/versions/0.9.0/topics/geom_hline  
 >
 > https://cran.r-project.org/web/packages/segmented/segmented.pdf  
-
+>
 > https://dplyr.tidyverse.org/reference/mutate-joins.html 
+>
+> https://dplyr.tidyverse.org/reference/mutate.html

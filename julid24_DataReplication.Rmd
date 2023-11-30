@@ -23,7 +23,8 @@ output:
 > I will be replicating ___ for the descriptive statistic, Figure 4, and 95% confidence intervals for median income for the inferential statistic. 
 
 ## Getting Started: Load Packages
-```{r, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
+library(curl)
 library(ggplot2) # for data visualization
 library(dplyr) # for data manipulation
 library(segmented) # for regression models
@@ -42,15 +43,21 @@ Please download the following datasets from my repository folder "Sy open data":
 - 3._Longitudinal_Mobility_zcta_borough.csv
 
 ```{r}
-d <- read.csv("Sy open data/3._Longitudinal_Mobility_zcta_borough.csv", header=TRUE)
+# 1._Cross-sectional_COVID19_mobility_zcta.csv 
+f <- curl("https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/1._Cross-sectional_COVID19_mobility_zcta.csv")
+d <- read.csv(f, header = TRUE)
 head(d)
-x <- read.csv("Sy open data/1._Cross-sectional_COVID19_mobility_zcta.csv", header=TRUE)
+
+# 3._Longitudinal_Mobility_zcta_borough.csv
+y <- curl("https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/3._Longitudinal_Mobility_zcta_borough.csv")
+x <- read.csv(y, header=TRUE)
 head(x)
 ```
 
+
 ## 95% Confidence Interval for Median Income
 ```{r}
-nyc_change_long2_zcta_nosi1 <- left_join(d, x[,c("ZCTA","median_income")], by=c("ZCTA"="ZCTA"))
+nyc_change_long2_zcta_nosi1 <- left_join(x, d[,c("ZCTA","median_income")], by=c("ZCTA"="ZCTA")) #left_join keeps all observations in x
 nyc_change_long2_zcta_nosi11 <- nyc_change_long2_zcta_nosi1 %>% mutate(income_d = ntile(median_income, 5))
 
 #To get the quantile minimum and maximum for each income group, to be used as labels in Figure 3
@@ -161,3 +168,5 @@ plot(fig4_2, echo=FALSE, fig.height=8, fig.width=8, message=FALSE, warning=FALSE
 > https://rdocumentation.org/packages/ggplot2/versions/0.9.0/topics/geom_hline  
 >
 > https://cran.r-project.org/web/packages/segmented/segmented.pdf  
+
+> https://dplyr.tidyverse.org/reference/mutate-joins.html 

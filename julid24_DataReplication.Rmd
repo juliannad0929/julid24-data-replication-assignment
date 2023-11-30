@@ -70,8 +70,7 @@ quantile <- nyc_med_income_zcta_1 %>%
 quantile
 ```
 
-
-<img src="img/95 Conf Int data rep.png" width="100px"/>
+![Median Income](img/95 Conf Int data rep.png)
 
 # 3. Replicating Figure 4
 > This figure assesses the association between sociodemographic variables, subway use, and COVID-19 rate per 100,0000 population. 
@@ -159,7 +158,7 @@ fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, yma
 plot(fig4_2, fig.height=8, fig.width=8)
 ```
 
-<img src="img/Figure 4 data rep.png" width="100px"/>
+![Figure 4](img/Figure 4 data rep.png)
 
 # Sources
 > https://stulp.gmw.rug.nl/ggplotworkshop/comparinggroupstatistics.html#mean-errorbar-plots  

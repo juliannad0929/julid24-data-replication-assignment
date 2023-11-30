@@ -70,6 +70,7 @@ quantile <- nyc_med_income_zcta_1 %>%
 quantile
 ```
 
+> Below, for reference, is Figure 3 from Sy (2020) from which I replicated the median income confidence intervals in the legend. 
 ![Median Income](img/95 Conf Int data rep.png)
 
 # 3. Replicating Figure 4
@@ -89,7 +90,7 @@ head(reg)
 > First, I'm going to rename the variables for the legend
 
 ```{r}
-# Step 1: Renaming the variables from the dataset and making labels for the legend
+# Step 1: Factoring the variables from the dataset and making labels for the legend
 reg$Variable <- factor(reg$Variable, levels = c("hs",
                                                 "healthins",
                                                 "minority",
@@ -158,6 +159,7 @@ fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, yma
 plot(fig4_2, fig.height=8, fig.width=8)
 ```
 
+> Below, for reference, is Figure 4 from Sy (2020) that I replicated above. 
 ![Figure 4](img/Figure 4 data rep.png)
 
 # Sources

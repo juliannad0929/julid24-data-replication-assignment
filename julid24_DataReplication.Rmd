@@ -17,7 +17,7 @@ output: rmdformats::readthedown
 
 ## Analyses Conducted
 > The authors conducted a variety of analyses, including cross-sectional analyses, risk ratios, odds ratios, beta coefficients, 95% confidence intervals, regression, and segmented regression.
-> I will be replicating ___ for the descriptive statistic, Figure 4, and 95% confidence intervals for median income for the inferential statistic. 
+> I will be replicating Supplemental Table 1 for the descriptive statistic, Figure 4, and 95% confidence intervals for median income for the inferential statistic. 
 
 ## Getting Started: Load Packages
 ```{r, message=FALSE, warning=FALSE}
@@ -29,14 +29,9 @@ library(segmented) # for regression models
 
 # 1. Descriptive Statistics
 
-## Import the Dataset
-```{r}
-a <- curl("https://raw.githubusercontent.com/juliannad0929/julid24-data-replication-assignment/main/Sy%20open%20data/5._Regression_output.csv")
-table <- read.csv(a, header=TRUE, stringsAsFactors = TRUE)
-head(table)
-```
+> After multiple attempts at getting the same descriptive statistics from this paper, I have come to realize that the public data I downloaded/have access to from DRYAD for this paper does not include the *original* data to get the exact results in the table and other descriptive statistics they mention. With that said, I have used skills from **Module 4** to create a matrix of the data from Supplementary Table 1. 
 
-## Descriptive Table?
+## Descriptive Table
 
 ```{r}
 tab <- matrix(c(-0.06, 0.26, 0.35, 0.82, 0.10, 0.06, 0.03, 0.10, -0.12, -0.24, 0.01, 0.2, -0.07, 0.01, -0.32, -0.02, -0.99, -0.75, 0.7, 1.44, 0.26, 0.11, 0.38, 0.21, 0.91, 1.31, 1.8, 1.36, 1.31, 1.07, 1.12, 1.25, 0.89, 1.08, 1.59, 1.09, 1.23, 1.05, 0.96, 1.19, 0.93, 1.59, 2.04, 1.7, 1.4, 1.09, 1.32, 1.31), ncol=6, byrow=FALSE)
@@ -46,19 +41,15 @@ tab <- as.table(tab)
 print(tab)
 ```
 
-```{r}
-# Separated by Outcome column
-subway <- table[1:8,]
-RR <- table[9:17,]
+## Reference Image
+> Below, for reference, is Supplemental Table 1 from Sy (2020). I only replicated the top part of the table, "Sociodemographic variables". 
 
-print(subway)
-print(RR)
-```
+![](img/Table 1 data rep.png)
 
 # 2. Inferential Statistics
 
 ## Import the Dataset
-Please download the following datasets from my repository folder "Sy open data": 
+Please load the following datasets from my repository folder "Sy open data": 
 
 - 1._Cross-sectional_COVID19_mobility_zcta.csv 
 - 3._Longitudinal_Mobility_zcta_borough.csv
@@ -90,8 +81,9 @@ quantile <- nyc_med_income_zcta_1 %>%
   summarise(min=min(median_income,na.rm=TRUE), max=max(median_income,na.rm=TRUE))
 quantile
 ```
-
+## Reference Image
 > Below, for reference, is Figure 3 from Sy (2020) from which I replicated the median income confidence intervals in the legend. 
+
 ![Median Income](img/95 Conf Int data rep.png)
 
 # 3. Replicating Figure 4
@@ -167,7 +159,6 @@ plot(fig4_1, fig.height=8, fig.width=8)
 
 ## Covid-Adjusted Risk Ratio
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print-FALSE}
-
 fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(trans = "log", limits=c(.8,2.2), breaks = c(.8,1,1.2,1.4,1.6,1.8, 2.0, 2.2)) +
   geom_pointrange(cex=0.3) +
@@ -180,7 +171,10 @@ fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, yma
 plot(fig4_2, fig.height=8, fig.width=8)
 ```
 
+## Reference Image
+
 > Below, for reference, is Figure 4 from Sy (2020) that I replicated above. 
+
 ![Figure 4](img/Figure 4 data rep.png)
 
 # Sources

@@ -1,7 +1,7 @@
 ---
 title: "AN588 Data Replication Assignment"
 author: "Julianna D."
-date: "`r Sys.Date()`"
+date: "December 13, 2023"
 output: rmdformats::readthedown
 ---
 # Introduction

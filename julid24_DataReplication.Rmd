@@ -144,7 +144,7 @@ RR$intercept <- 1 #the null for risk ratio is 1
 ## Subway_Use Estimated Beta
 > Then, we will make our figures for the estimated Beta for "Subway_Use" and the "COVID-adjusted" Risk Ratios.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r, message=FALSE, warning=FALSE}
 fig4_1 <- ggplot(data=mobil, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(limits=c(-.5,1.5), breaks = c(-.5,0,.5,1,1.5)) +
   geom_pointrange(cex=0.3) +
@@ -158,7 +158,7 @@ plot(fig4_1, fig.height=8, fig.width=8)
 ```
 
 ## Covid-Adjusted Risk Ratio
-```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print-FALSE}
+```{r, message=FALSE, warning=FALSE}
 fig4_2 <- ggplot(data=RR, aes(x = Variable,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit )) +
   scale_y_continuous(trans = "log", limits=c(.8,2.2), breaks = c(.8,1,1.2,1.4,1.6,1.8, 2.0, 2.2)) +
   geom_pointrange(cex=0.3) +
